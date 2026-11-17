@@ -1,1 +1,328 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriDay - Diet Planner</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f8f2;
+  color: #203129;
+}
+
+header {
+  background: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: #2f7654;
+}
+
+main {
+  max-width: 1000px;
+  margin: 35px auto;
+  padding: 20px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.hero h1 {
+  font-size: 38px;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: #718078;
+  line-height: 1.6;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  border: 1px solid #e5ebe3;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 7px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: #2f7654;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #245e42;
+}
+
+.meal {
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 12px;
+  background: #f2f7ef;
+  line-height: 1.6;
+}
+
+.meal h3 {
+  color: #2f7654;
+  margin-bottom: 5px;
+}
+
+.result {
+  color: #718078;
+  line-height: 1.7;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #718078;
+  font-size: 12px;
+}
+
+@media(max-width:700px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 30px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🥑 NutriDay</div>
+  <span>Your Daily Diet Plan</span>
+</header>
+
+<main>
+
+<section class="hero">
+  <h1>Eat Healthy. Live Better. 🥗</h1>
+  <p>Create your personal diet plan and achieve your fitness goals.</p>
+</section>
+
+<div class="container">
+
+<div class="card">
+  <h2>Personal Details</h2>
+
+  <form id="dietForm">
+
+    <label>Age</label>
+    <input type="number" id="age" min="18" max="100" required>
+
+    <label>Weight (kg)</label>
+    <input type="number" id="weight" min="35" max="250" required>
+
+    <label>Height (cm)</label>
+    <input type="number" id="height" min="120" max="230" required>
+
+    <label>Gender</label>
+    <select id="gender">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <label>Activity Level</label>
+    <select id="activity">
+      <option value="1.2">Low Activity</option>
+      <option value="1.375">Light Activity</option>
+      <option value="1.55">Moderate Activity</option>
+      <option value="1.725">High Activity</option>
+    </select>
+
+    <label>Fitness Goal</label>
+    <select id="goal">
+      <option value="maintain">Maintain Weight</option>
+      <option value="lose">Lose Weight</option>
+      <option value="gain">Gain Weight</option>
+    </select>
+
+    <label>Food Preference</label>
+    <select id="food">
+      <option value="mixed">Vegetarian + Non-Vegetarian</option>
+      <option value="veg">Vegetarian</option>
+      <option value="egg">Vegetarian + Eggs</option>
+    </select>
+
+    <button type="submit">Generate My Diet Plan</button>
+
+  </form>
+</div>
+
+<div class="card">
+  <h2>Your Diet Plan 🍎</h2>
+  <div id="result" class="result">
+    Enter your details to generate your personal diet plan.
+  </div>
+</div>
+
+</div>
+</main>
+
+<footer>
+  © 2026 NutriDay | Healthy Food, Healthy Life
+  <br>
+  General wellness guidance only. Consult a registered dietitian
+  for personalized nutrition advice.
+</footer>
+
+<script>
+
+const dietForm = document.getElementById("dietForm");
+
+dietForm.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const age = Number(document.getElementById("age").value);
+  const weight = Number(document.getElementById("weight").value);
+  const height = Number(document.getElementById("height").value);
+  const gender = document.getElementById("gender").value;
+  const activity = Number(document.getElementById("activity").value);
+  const goal = document.getElementById("goal").value;
+  const food = document.getElementById("food").value;
+
+  if (age < 18 || age > 100 ||
+      weight < 35 || weight > 250 ||
+      height < 120 || height > 230) {
+    alert("Please enter valid details.");
+    return;
+  }
+
+  const bmr = 10 * weight + 6.25 * height -
+    5 * age + (gender === "male" ? 5 : -161);
+
+  let calories = bmr * activity;
+
+  if (goal === "lose") calories -= 300;
+  if (goal === "gain") calories += 250;
+
+  calories = Math.round(calories / 50) * 50;
+
+  const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+
+  let meals;
+
+  if (food === "veg") {
+    meals = [
+      ["Breakfast", "Idli, sambar and curd"],
+      ["Morning Snack", "Banana and almonds"],
+      ["Lunch", "Rice, sambar, vegetables and curd"],
+      ["Evening Snack", "Buttermilk and roasted chana"],
+      ["Dinner", "Chapati and paneer curry"]
+    ];
+  } else if (food === "egg") {
+    meals = [
+      ["Breakfast", "Idli, sambar and boiled egg"],
+      ["Morning Snack", "Seasonal fruit and almonds"],
+      ["Lunch", "Rice, vegetables and curd"],
+      ["Evening Snack", "Buttermilk and roasted chana"],
+      ["Dinner", "Chapati and egg curry"]
+    ];
+  } else {
+    meals = [
+      ["Breakfast", "Idli, sambar and boiled egg"],
+      ["Morning Snack", "Banana and almonds"],
+      ["Lunch", "Rice, fish curry and vegetables"],
+      ["Evening Snack", "Buttermilk and roasted chana"],
+      ["Dinner", "Chapati and chicken curry"]
+    ];
+  }
+
+  const goalText = {
+    lose: "Gradual Weight Loss",
+    gain: "Gradual Weight Gain",
+    maintain: "Weight Maintenance"
+  };
+
+  let html = `
+    <h3 style="color:#2f7654">Your Daily Nutrition Estimate</h3>
+    <br>
+    <p><b>Daily Calories:</b> ${calories} kcal</p>
+    <p><b>BMI:</b> ${bmi}</p>
+    <p><b>Goal:</b> ${goalText[goal]}</p>
+    <br>
+    <h3>Daily Meal Schedule</h3>
+  `;
+
+  meals.forEach(meal => {
+    html += `
+      <div class="meal">
+        <h3>${meal[0]}</h3>
+        <p>${meal[1]}</p>
+      </div>
+    `;
+  });
+
+  html += `
+    <br>
+    <p><b>Healthy Tip:</b> Drink enough water,
+    eat vegetables and include protein in your meals.</p>
+    <p style="font-size:12px;margin-top:12px">
+    Calorie figures are estimates, not medical prescriptions.
+    </p>
+  `;
+
+  document.getElementById("result").innerHTML = html;
+
+});
+
+</script>
+
+</body>
+</html>
+
